@@ -28,8 +28,9 @@ export default function Landing() {
     iosClientId: IOS_CLIENT_ID,
     androidClientId: ANDROID_CLIENT_ID,
     webClientId: WEB_CLIENT_ID,
-    redirectUri: AuthSession.makeRedirectUri(),
+    redirectUri: 'https://auth.expo.io/@kiruthika.star14/SkinSense',
   });
+
 
   // Auth state listener
   useEffect(() => {

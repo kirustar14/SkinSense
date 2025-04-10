@@ -15,7 +15,13 @@
     },
     "ios": {
       "supportsTablet": true, 
-      "bundleIdentifier": "com.skinsense.app"
+      "bundleIdentifier": "com.skinsense.app", 
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "133869081716-ms56hifk7k473s54ehup3kugn1f7lcno.apps.googleusercontent.com" 
+        }
+      }
+
     },
     "android": {
       "adaptiveIcon": {
