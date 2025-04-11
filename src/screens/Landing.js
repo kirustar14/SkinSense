@@ -7,10 +7,13 @@ import { auth } from '../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID, EXPO_CLIENT_ID } from '@env';
 import { makeRedirectUri } from 'expo-auth-session';
+import { updateProfile } from 'firebase/auth';
+
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Landing() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -29,7 +32,6 @@ export default function Landing() {
       useProxy: true,
     }),
   });
-  console.log(makeRedirectUri({useProxy: true})); 
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -47,6 +49,7 @@ export default function Landing() {
       signInWithCredential(auth, credential)
         .then(() => {
           navigation.replace('Dashboard');
+
         })
         .catch((err) => {
           Alert.alert('Google Login Error', err.message);
@@ -63,20 +66,34 @@ export default function Landing() {
       Alert.alert('Error', error.message);
     }
   };
+const handleSignUp = async () => {
+  if (!email || !password || !confirmPassword) {
+    return Alert.alert('Error', 'Please fill all fields');
+  }
+  if (password !== confirmPassword) {
+    return setPasswordMatch(false);
+  }
+  if (password.length < 6) {
+    return setIsPasswordValid(false);
+  }
 
-  const handleSignUp = async () => {
-    if (!email || !password || !confirmPassword) return Alert.alert('Error', 'Please fill all fields');
-    if (password !== confirmPassword) return setPasswordMatch(false);
-    if (password.length < 6) return setIsPasswordValid(false);
+  try {
+    // Create user with email and password
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    // After user is created, update the user's profile with their display name
+    await updateProfile(userCredential.user, {
+      displayName: name, 
+    });
+    await userCredential.user.reload();
+    // Alert the user of success and close the modal
+    Alert.alert('Success', 'Account created!');
+    setIsModalVisible(false);
 
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      Alert.alert('Success', 'Account created!');
-      setIsModalVisible(false);
     } catch (error) {
       Alert.alert('Error', error.message);
     }
   };
+
 
   const toggleModal = (isSignUp) => {
     setIsSignUp(isSignUp);
@@ -111,6 +128,14 @@ export default function Landing() {
               <Text style={styles.closeButtonText}>×</Text>
             </TouchableOpacity>
             <Text style={styles.modalTitle}>{isSignUp ? 'Sign Up' : 'Login'}</Text>
+            {isSignUp && (
+              <TextInput
+                style={styles.input}
+                placeholder="Name"
+                value={name}
+                onChangeText={setName}
+              />
+            )}
             <TextInput
               style={styles.input}
               placeholder="Email"
