@@ -29,11 +29,12 @@ export default function Landing() {
       useProxy: true,
     }),
   });
+  console.log(makeRedirectUri({useProxy: true})); 
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        navigation.replace('Dashboard');
+        navigation.navigate('Dashboard');
       }
     });
     return unsub; // Unsubscribe when the component unmounts
@@ -41,8 +42,8 @@ export default function Landing() {
 
   useEffect(() => {
     if (response?.type === 'success') {
-      const { id_token } = response.authentication;
-      const credential = GoogleAuthProvider.credential(id_token);
+      console.log('Authentication response:', response?.authentication);
+      const credential = GoogleAuthProvider.credential(response.authentication.idToken);
       signInWithCredential(auth, credential)
         .then(() => {
           navigation.replace('Dashboard');

@@ -13,24 +13,24 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true, 
-      "bundleIdentifier": "com.skinsense.app", 
+      "supportsTablet": true,
+      "bundleIdentifier": "com.skinsense.app",
       "config": {
         "googleSignIn": {
-          "reservedClientId": "133869081716-ms56hifk7k473s54ehup3kugn1f7lcno.apps.googleusercontent.com" 
+          "reservedClientId": "133869081716-ms56hifk7k473s54ehup3kugn1f7lcno.apps.googleusercontent.com"
         }
       }
-
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.skinsense.app"
     },
     "web": {
       "config": {
         "googleSignIn": {
-          "clientId": "133869081716-72vru4cuv3m1ess0ra0oijn12slqk6or.apps.googleusercontent.com"  
+          "clientId": "133869081716-72vru4cuv3m1ess0ra0oijn12slqk6or.apps.googleusercontent.com"
         }
       }
     }
