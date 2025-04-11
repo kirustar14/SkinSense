@@ -17,7 +17,7 @@ export default function App() {
       setUser(currentUser || null);
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // Unsubscribe on component unmount
   }, []);
 
   return (
