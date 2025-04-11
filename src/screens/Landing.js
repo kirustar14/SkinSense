@@ -7,6 +7,7 @@ import { useAuthRequest } from 'expo-auth-session/providers/google';
 import { auth } from '../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID, EXPO_CLIENT_ID } from '@env';
+import { makeRedirectUri } from 'expo-auth-session';
 
 // Ensures that the auth session is completed when navigating between screens
 WebBrowser.maybeCompleteAuthSession();
@@ -25,11 +26,17 @@ export default function Landing() {
 
   const [request, response, promptAsync] = useAuthRequest({
     expoClientId: EXPO_CLIENT_ID,
-    iosClientId: IOS_CLIENT_ID,
+    iosClientId: WEB_CLIENT_ID,
     androidClientId: ANDROID_CLIENT_ID,
     webClientId: WEB_CLIENT_ID,
-    redirectUri: 'https://auth.expo.io/@kiruthika.star14/SkinSense',
+    redirectUri: makeRedirectUri({
+      useProxy: true, 
+    }),
   });
+
+  console.log(makeRedirectUri({
+    useProxy: true, 
+  }),)
 
 
   // Auth state listener
@@ -45,18 +52,26 @@ export default function Landing() {
     return unsub;
   }, []);
 
-  // Google auth response handler
   useEffect(() => {
     if (response?.type === 'success') {
+      console.log('Auth response:', response);
       const { id_token } = response.authentication;
       const credential = GoogleAuthProvider.credential(id_token);
-
-      // Sign in with Google credentials to Firebase
       signInWithCredential(auth, credential)
-        .then(() => navigation.replace('Dashboard'))
-        .catch((err) => Alert.alert('Google Login Error', err.message));
+        .then(() => {
+          console.log('Successfully signed in with Google');
+          navigation.replace('Dashboard');
+        })
+        .catch((err) => {
+          console.log('Google Login Error:', err.message);
+          Alert.alert('Google Login Error', err.message);
+        });
+    } else if (response?.type === 'error') {
+      console.log('Auth error:'+ response.error);
     }
   }, [response]);
+  
+  console.log("next part"); 
 
   // Login handler
   const handleLogin = async () => {

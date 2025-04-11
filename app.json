@@ -2,14 +2,13 @@
   "expo": {
     "name": "SkinSense",
     "slug": "SkinSense",
+    "owner": "kiruthika.star14",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "scheme": "com.skinsense.app",
     "splash": {
-      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -25,11 +24,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
+      "config": {
+        "googleSignIn": {
+          "clientId": "133869081716-72vru4cuv3m1ess0ra0oijn12slqk6or.apps.googleusercontent.com"  
+        }
+      }
     }
   }
 }
